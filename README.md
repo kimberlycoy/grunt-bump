@@ -90,7 +90,8 @@ bump: {
     tagMessage: 'Version %VERSION%',
     push: true,
     pushTo: 'upstream',
-    gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d' // options to use with '$ git describe'
+    gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d' // options to use with '$ git describe',
+    gitCommand: undefined  // command to use instead of '$ git describe', e.g. 'git rev-parse --short HEAD'
   }
 }
 ```

@@ -49,7 +49,7 @@ module.exports = function(grunt) {
 
     var exactVersionToSet = grunt.option('setversion');
     if (!semver.valid(exactVersionToSet)) {
-        exactVersionToSet = false;
+      exactVersionToSet = false;
     }
 
     var done = this.async();
@@ -70,13 +70,14 @@ module.exports = function(grunt) {
     }
 
     var globalVersion; // when bumping multiple files
-    var gitVersion;    // when bumping using `git describe`
+    var gitVersion;    // when bumping using `git describe` or opt.gitCommand
     var VERSION_REGEXP = /([\'|\"]?version[\'|\"]?[ ]*:[ ]*[\'|\"]?)([\d||A-a|.|\-|+\w]*)([\'|\"]?)/i;
 
 
     // GET VERSION FROM GIT
-    runIf(opts.bumpVersion && versionType === 'git', function(){
-      exec('git describe ' + opts.gitDescribeOptions, function(err, stdout, stderr){
+    runIf(opts.bumpVersion && versionType === 'git', function() {
+      var gitCommand = opts.gitCommand || 'git describe ' + opts.gitDescribeOptions
+      exec(gitCommand, function(err, stdout, stderr) {
         if (err) {
           grunt.fatal('Can not get a version number using `git describe`');
         }
@@ -87,11 +88,12 @@ module.exports = function(grunt) {
 
 
     // BUMP ALL FILES
-    runIf(opts.bumpVersion, function(){
+    runIf(opts.bumpVersion, function() {
       opts.files.forEach(function(file, idx) {
         var version = null;
         var content = grunt.file.read(file).replace(VERSION_REGEXP, function(match, prefix, parsedVersion, suffix) {
-          version = exactVersionToSet || versionWithGit(parsedVersion, gitVersion) || semver.inc(parsedVersion, versionType || 'patch');
+          version = exactVersionToSet || versionWithGit(parsedVersion, gitVersion) ||
+              semver.inc(parsedVersion, versionType || 'patch');
           return prefix + version + suffix;
         });
 
@@ -157,7 +159,7 @@ module.exports = function(grunt) {
       var tagName = opts.tagName.replace('%VERSION%', globalVersion);
       var tagMessage = opts.tagMessage.replace('%VERSION%', globalVersion);
 
-      exec('git tag -a ' + tagName + ' -m "' + tagMessage + '"' , function(err, stdout, stderr) {
+      exec('git tag -a ' + tagName + ' -m "' + tagMessage + '"', function(err, stdout, stderr) {
         if (err) {
           grunt.fatal('Can not create the tag:\n  ' + stderr);
         }
