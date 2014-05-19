@@ -67,7 +67,7 @@ module.exports = function(grunt) {
     };
     var versionWithGit = function(parsedVersion, gitVersion) {
       return gitVersion && parsedVersion.replace(/(\+\w+)|$/, '+' + gitVersion);
-    }
+    };
 
     var globalVersion; // when bumping multiple files
     var gitVersion;    // when bumping using `git describe` or opt.gitCommand

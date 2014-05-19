@@ -48,7 +48,9 @@
   "devDependencies": {
     "grunt": "~0.4",
     "grunt-npm": "~0.0.1",
-    "grunt-auto-release": "~0.0.3"
+    "grunt-auto-release": "~0.0.3",
+    "grunt-simple-mocha": "~0.4.0",
+    "should": "~3.3.1"
   },
   "keywords": [
     "gruntplugin"
